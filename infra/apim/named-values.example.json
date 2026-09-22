@@ -1,0 +1,6 @@
+{
+  "frontend-origin": "https://YOUR_STATIC_WEB_APP.azurestaticapps.net",
+  "gateway-url": "https://YOUR_GATEWAY.YOUR_REGION.azurecontainerapps.io",
+  "api-audience": "YOUR_BACKEND_APPLICATION_CLIENT_ID_GUID",
+  "entra-openid-config-url": "https://login.microsoftonline.com/YOUR_TENANT_ID/v2.0/.well-known/openid-configuration"
+}

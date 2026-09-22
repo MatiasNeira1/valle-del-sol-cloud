@@ -1,0 +1,48 @@
+openapi: 3.0.3
+info: { title: Valle del Sol Emergency API, version: 1.0.0 }
+servers: [{ url: https://YOUR_APIM_NAME.azure-api.net }]
+components:
+  securitySchemes:
+    entraBearer: { type: oauth2, flows: { authorizationCode: { authorizationUrl: https://login.microsoftonline.com/YOUR_TENANT_ID/oauth2/v2.0/authorize, tokenUrl: https://login.microsoftonline.com/YOUR_TENANT_ID/oauth2/v2.0/token, scopes: { api://YOUR_API_CLIENT_ID/api.access: Access emergency API } } } }
+  schemas:
+    CurrentUser:
+      type: object
+      required: [id, name, email, roles]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        email: { type: string }
+        roles: { type: array, items: { type: string, enum: [ADMIN, STAFF, EMERGENCY_ENTITY, USER] } }
+    Reporte:
+      type: object
+      properties: { id: { type: integer, format: int64 }, titulo: { type: string }, descripcion: { type: string }, latitud: { type: number }, longitud: { type: number }, estado: { type: string } }
+    Alerta:
+      type: object
+      properties: { id: { type: integer, format: int64 }, mensaje: { type: string }, nivelRiesgo: { type: string }, zonaAfectada: { type: string } }
+security: [{ entraBearer: [api://YOUR_API_CLIENT_ID/api.access] }]
+paths:
+  /api/me:
+    get:
+      operationId: obtenerPerfilActual
+      responses:
+        '200':
+          description: Identidad y roles obtenidos del access token validado
+          content: { application/json: { schema: { $ref: '#/components/schemas/CurrentUser' } } }
+        '401': { description: Unauthorized }
+        '403': { description: Forbidden }
+  /api/reportes:
+    get: { operationId: listarReportes, responses: { '200': { description: OK }, '401': { description: Unauthorized } } }
+  /api/reportes/sincronizar:
+    get: { operationId: sincronizarReportes, responses: { '200': { description: OK } } }
+  /api/reportes/crear:
+    post: { operationId: crearReporte, requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/Reporte' } } } }, responses: { '201': { description: Created }, '403': { description: Forbidden } } }
+  /api/reportes/editar/{id}:
+    put: { operationId: editarReporte, parameters: [{ in: path, name: id, required: true, schema: { type: integer, format: int64 } }], requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/Reporte' } } } }, responses: { '200': { description: OK }, '403': { description: Forbidden } } }
+  /api/reportes/eliminar/{id}:
+    delete: { operationId: eliminarReporte, parameters: [{ in: path, name: id, required: true, schema: { type: integer, format: int64 } }], responses: { '204': { description: Deleted }, '403': { description: Forbidden } } }
+  /api/mapa/sincronizar:
+    get: { operationId: sincronizarMapa, responses: { '200': { description: OK } } }
+  /api/notificaciones/historial:
+    get: { operationId: historialNotificaciones, responses: { '200': { description: OK } } }
+  /api/notificaciones/enviar:
+    post: { operationId: enviarNotificacion, parameters: [{ in: query, name: canal, required: true, schema: { type: string, enum: [SMS, EMAIL] } }], requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/Alerta' } } } }, responses: { '200': { description: OK }, '403': { description: Forbidden } } }

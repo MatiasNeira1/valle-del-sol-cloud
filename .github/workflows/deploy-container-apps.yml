@@ -1,0 +1,19 @@
+name: Deploy Container Apps
+on: { workflow_dispatch: {} }
+permissions: { contents: read, id-token: write }
+jobs:
+  deploy:
+    environment: azure-production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with: { client-id: '${{ secrets.AZURE_CLIENT_ID }}', tenant-id: '${{ secrets.AZURE_TENANT_ID }}', subscription-id: '${{ secrets.AZURE_SUBSCRIPTION_ID }}' }
+      - name: Deploy immutable image tags
+        env: { RG: '${{ vars.AZURE_RESOURCE_GROUP }}', ACR: '${{ vars.ACR_NAME }}', TAG: '${{ inputs.tag || github.sha }}' }
+        shell: bash
+        run: |
+          az containerapp update -g "$RG" -n "${{ vars.GATEWAY_APP_NAME }}" --image "$ACR.azurecr.io/api-gateway:$TAG"
+          az containerapp update -g "$RG" -n "${{ vars.ALERTAS_APP_NAME }}" --image "$ACR.azurecr.io/ms-alerta-incendios:$TAG"
+          az containerapp update -g "$RG" -n "${{ vars.MAPA_APP_NAME }}" --image "$ACR.azurecr.io/ms-monitoreo-geo:$TAG"
+          az containerapp update -g "$RG" -n "${{ vars.NOTIFICACIONES_APP_NAME }}" --image "$ACR.azurecr.io/ms-notificaciones:$TAG"

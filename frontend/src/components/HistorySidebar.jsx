@@ -1,0 +1,67 @@
+import React from 'react';
+import { Bell } from 'lucide-react';
+
+const HistorySidebar = ({ historial, onSelect, compact = false }) => {
+  const getStatusStyle = (estado) => {
+    if (estado === 'RESUELTO') {
+      return { borderColor: '#10b981', dotClass: 'bg-emerald-500' };
+    }
+    if (estado === 'CONTROLADO') {
+      return { borderColor: '#f59e0b', dotClass: 'bg-amber-500 animate-pulse' };
+    }
+    if (estado?.startsWith('EN CAMINO') || estado === 'EN_PROCESO') {
+      return { borderColor: '#3b82f6', dotClass: 'bg-blue-500 animate-pulse' };
+    }
+    return { borderColor: '#ef4444', dotClass: 'bg-red-500 animate-pulse' };
+  };
+
+  return (
+    <div className={`bg-slate-900 border border-slate-800 shadow-2xl flex flex-col h-[500px] ${compact ? 'rounded-3xl p-4' : 'rounded-[2.5rem] p-6'}`}>
+      <h3 className={`font-bold text-white uppercase tracking-widest text-sm flex items-center gap-2 italic tracking-tighter ${compact ? 'mb-4' : 'mb-6'}`}>
+        <Bell size={16} className="text-red-500" /> Historial de Alertas
+      </h3>
+      
+      <div className="space-y-3 overflow-y-auto pr-2 custom-scrollbar flex-1">
+        {historial && historial.map((rep, index) => {
+          const style = getStatusStyle(rep.estado);
+          return (
+            <button 
+              key={rep.id || index} 
+              onClick={() => onSelect(rep)}
+              className="w-full bg-slate-950/40 p-4 rounded-2xl flex gap-4 items-start hover:bg-slate-800 transition-all text-left group relative"
+            >
+              {/* Borde izquierdo indicador normal */}
+              <div className="absolute left-0 top-0 bottom-0 w-1 rounded-l-2xl" style={{ backgroundColor: style.borderColor }}></div>
+              
+              {/* Borde rojo tintineante si está pendiente o nuevo */}
+              {(rep.estado === 'PENDIENTE' || rep.estado === 'NUEVO') && (
+                <div className="absolute inset-0 border-[2px] border-red-500 shadow-[inset_0_0_15px_rgba(239,68,68,0.3),0_0_15px_rgba(239,68,68,0.6)] animate-pulse pointer-events-none z-10 rounded-2xl"></div>
+              )}
+
+              <div className={`mt-1.5 ml-2 w-2.5 h-2.5 rounded-full ${style.dotClass}`}></div>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-slate-200 group-hover:text-white transition-colors tracking-tighter">
+                  {rep.titulo}
+                </p>
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-[9px] text-slate-500 font-black uppercase italic tracking-tighter">
+                    {rep.estado}
+                  </p>
+                  <p className="text-[9px] text-emerald-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-tighter">
+                    Detalles →
+                  </p>
+                </div>
+              </div>
+            </button>
+          );
+        })}
+        {(!historial || historial.length === 0) && (
+          <p className="text-center text-slate-600 text-xs mt-10 italic">No hay reportes activos</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+
+export default HistorySidebar;

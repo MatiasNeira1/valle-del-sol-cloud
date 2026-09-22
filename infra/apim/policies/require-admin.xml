@@ -1,0 +1,11 @@
+<policies>
+  <inbound>
+    <base />
+    <choose>
+      <when condition="@{ var jwt = (Jwt)context.Variables[&quot;validated-jwt&quot;]; return !jwt.Claims.ContainsKey(&quot;roles&quot;) || !jwt.Claims[&quot;roles&quot;].Contains(&quot;ADMIN&quot;); }">
+        <return-response><set-status code="403" reason="Forbidden" /><set-body>{"error":"insufficient_role"}</set-body></return-response>
+      </when>
+    </choose>
+  </inbound>
+  <backend><base /></backend><outbound><base /></outbound><on-error><base /></on-error>
+</policies>

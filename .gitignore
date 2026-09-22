@@ -1,0 +1,35 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+**/application-secrets.yml
+**/application-secrets.yaml
+**/Wallet*/
+**/wallet*/
+*.p12
+*.pfx
+*.pem
+*.key
+*.jks
+*.sso
+*.crt
+*.cer
+
+# Build and dependency output
+**/target/
+**/node_modules/
+**/dist/
+**/.vite/
+**/.m2/
+**/.firebase/
+backend/package-lock.json
+*.class
+*.jar
+
+# Logs and tooling
+*.log
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

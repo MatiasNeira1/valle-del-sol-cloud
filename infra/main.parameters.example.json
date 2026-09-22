@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": { "value": "eastus2" },
+    "suffix": { "value": "REPLACEUNIQUE" },
+    "publisherEmail": { "value": "REPLACE_WITH_REAL_EMAIL" },
+    "postgresAdminPassword": { "reference": { "keyVault": { "id": "/subscriptions/SUBSCRIPTION_ID/resourceGroups/SECURITY_RG/providers/Microsoft.KeyVault/vaults/BOOTSTRAP_VAULT" }, "secretName": "postgres-admin-password" } },
+    "tenantId": { "value": "TENANT_ID" },
+    "apiAudience": { "value": "BACKEND_APPLICATION_CLIENT_ID_GUID" },
+    "entraIssuerUri": { "value": "https://login.microsoftonline.com/TENANT_ID/v2.0" },
+    "corsAllowedOrigins": { "value": "https://YOUR_STATIC_WEB_APP.azurestaticapps.net" },
+    "gatewayImage": { "value": "REGISTRY.azurecr.io/api-gateway:TAG" },
+    "alertasImage": { "value": "REGISTRY.azurecr.io/ms-alerta-incendios:TAG" },
+    "mapaImage": { "value": "REGISTRY.azurecr.io/ms-monitoreo-geo:TAG" },
+    "notificacionesImage": { "value": "REGISTRY.azurecr.io/ms-notificaciones:TAG" }
+  }
+}

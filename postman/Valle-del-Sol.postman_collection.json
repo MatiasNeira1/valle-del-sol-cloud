@@ -1,0 +1,12 @@
+{
+  "info": { "name": "Valle del Sol Azure API", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{accessToken}}", "type": "string" }] },
+  "item": [
+    { "name": "401 - sin token", "request": { "auth": { "type": "noauth" }, "method": "GET", "url": "{{apimUrl}}/api/reportes" }, "event": [{ "listen": "test", "script": { "exec": ["pm.test('401', () => pm.response.to.have.status(401));"] } }] },
+    { "name": "401 - token inválido", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "invalid.jwt.value", "type": "string" }] }, "method": "GET", "url": "{{apimUrl}}/api/reportes" }, "event": [{ "listen": "test", "script": { "exec": ["pm.test('401', () => pm.response.to.have.status(401));"] } }] },
+    { "name": "200 - listar reportes", "request": { "method": "GET", "url": "{{apimUrl}}/api/reportes" }, "event": [{ "listen": "test", "script": { "exec": ["pm.test('200', () => pm.response.to.have.status(200));"] } }] },
+    { "name": "403 - eliminar sin rol", "request": { "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{tokenWithoutRole}}", "type": "string" }] }, "method": "DELETE", "url": "{{apimUrl}}/api/reportes/eliminar/{{reportId}}" }, "event": [{ "listen": "test", "script": { "exec": ["pm.test('403', () => pm.response.to.have.status(403));"] } }] },
+    { "name": "Mapa", "request": { "method": "GET", "url": "{{apimUrl}}/api/mapa/sincronizar" } },
+    { "name": "Historial notificaciones", "request": { "method": "GET", "url": "{{apimUrl}}/api/notificaciones/historial" } }
+  ]
+}

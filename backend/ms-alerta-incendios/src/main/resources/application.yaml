@@ -1,0 +1,34 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: ms-alerta-incendios
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:valle_del_sol}?sslmode=${DB_SSL_MODE:disable}
+    username: ${DB_USERNAME:valle_app}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate.default_schema: alertas
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    schemas: alertas
+    table: flyway_schema_history_alertas
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI}
+azure:
+  api-audience: ${AZURE_API_AUDIENCE}
+app:
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+management:
+  endpoints.web.exposure.include: health,info
+  endpoint.health.probes.enabled: true
+logging.pattern.level: "%5p [correlationId:%X{correlationId:-}]"

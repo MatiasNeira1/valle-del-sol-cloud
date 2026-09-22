@@ -1,0 +1,7 @@
+spring:
+  jpa:
+    show-sql: false
+    hibernate.ddl-auto: validate
+  datasource.hikari:
+    maximum-pool-size: 10
+    connection-timeout: 30000

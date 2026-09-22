@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI}
+          audiences: ${AZURE_API_AUDIENCE}
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: reportes
+              uri: ${MS_ALERTA_URL:http://localhost:8081}
+              predicates: [Path=/api/reportes/**]
+            - id: mapa
+              uri: ${MS_MONITOREO_URL:http://localhost:8082}
+              predicates: [Path=/api/mapa/**]
+            - id: notificaciones
+              uri: ${MS_NOTIFICACIONES_URL:http://localhost:8083}
+              predicates: [Path=/api/notificaciones/**]
+
+azure:
+  api-audience: ${AZURE_API_AUDIENCE}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  pattern:
+    level: "%5p [correlationId:%X{correlationId:-}]"

@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:mapa;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS mapa
+    username: sa
+    password: ""
+    driver-class-name: org.h2.Driver
+  jpa.hibernate.ddl-auto: create-drop
+  flyway.enabled: false
+  security.oauth2.resourceserver.jwt:
+    issuer-uri: https://issuer.example.test
+    jwk-set-uri: https://issuer.example.test/jwks
+azure.api-audience: 11111111-1111-1111-1111-111111111111
+app.cors.allowed-origins: http://localhost:5173
+alerta.url: http://localhost:8081

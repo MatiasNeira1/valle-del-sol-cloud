@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@keyframes slideUp {
+  from {
+    transform: translate(-50%, 20px);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes firePulse {
+  0%, 100% { transform: rotate(-45deg) translateY(0) scale(1); }
+  50% { transform: rotate(-45deg) translateY(-3px) scale(1.08); }
+}
+
+.emergency-fire-marker {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  color: #ef4444;
+  background: rgba(69, 10, 10, 0.92);
+  border: 2px solid rgba(254, 202, 202, 0.9);
+  border-radius: 50% 50% 50% 12%;
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.55);
+  animation: firePulse 1.35s ease-in-out infinite;
+}
+
+.emergency-fire-marker svg {
+  transform: rotate(45deg);
+}
+
+/* Custom styling for dark-mode date picker indicators */
+/* Hide default native calendar picker indicator */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.15);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.3);
+}

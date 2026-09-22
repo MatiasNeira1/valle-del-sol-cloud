@@ -1,0 +1,35 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: ms-monitoreo-geo
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:valle_del_sol}?sslmode=${DB_SSL_MODE:disable}
+    username: ${DB_USERNAME:valle_app}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    properties.hibernate.default_schema: mapa
+    hibernate.ddl-auto: validate
+  flyway:
+    enabled: true
+    schemas: mapa
+    table: flyway_schema_history_mapa
+  security.oauth2.resourceserver.jwt.issuer-uri: ${SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI}
+azure.api-audience: ${AZURE_API_AUDIENCE}
+app.cors.allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+alerta.url: ${MS_ALERTA_URL:http://localhost:8081}
+resilience4j:
+  circuitbreaker.instances.alertaCB:
+    sliding-window-size: 5
+    failure-rate-threshold: 50
+    wait-duration-in-open-state: 10s
+    permitted-number-of-calls-in-half-open-state: 3
+    ignore-exceptions:
+      - feign.FeignException$Unauthorized
+      - feign.FeignException$Forbidden
+management:
+  endpoints.web.exposure.include: health,info
+  endpoint.health.probes.enabled: true
+logging.pattern.level: "%5p [correlationId:%X{correlationId:-}]"
