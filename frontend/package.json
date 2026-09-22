@@ -11,7 +11,7 @@
     "test": "node --test src/utils/*.test.js"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/postcss": "^4.3.3",
     "@azure/msal-browser": "^4.24.1",
     "@azure/msal-react": "^3.0.21",
     "@vis.gl/react-google-maps": "^1.8.3",
